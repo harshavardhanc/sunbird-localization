@@ -12,14 +12,18 @@ jobs:
           name: Publish to NPM
           command: |
             if [ -z $CIRCLE_PR_NUMBER ]; then 
-              npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
-              npm publish ~/project 
+              echo "Publish artifact"
             else
               echo "Nothing to publish!" 
             fi
 
+#adding approval
 workflows:
   version: 2.1
   build_and_test:
     jobs:
       - build
+      - request-testing:
+          type: approval
+          requires:
+            - build
